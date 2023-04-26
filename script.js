@@ -32,13 +32,30 @@ darkBg.addEventListener('click', () => closeModal());
 // Array to store book objects
 const myLibrary = [];
 
-function displayBook() {
+// Returns a book object via user form input
+function createBook(form) {
+  const formData = new FormData(form);
+  return Object.fromEntries(formData);
+}
+
+// Returns a button element with class "remove-book"
+function createRemoveBookBtn() {
+  const removeBookBtn = document.createElement('button');
+  removeBookBtn.classList.add('remove-book');
+  removeBookBtn.textContent = 'Remove';
+  return removeBookBtn;
+}
+
+// Renders the book objects stored in myLibrary
+function displayBooks() {
   const container = document.getElementById('book-container');
   container.innerHTML = '';
 
   myLibrary.forEach((book) => {
+    const index = myLibrary.indexOf(book);
     const card = document.createElement('div');
     card.classList.add('book');
+    card.dataset.index = index;
     const bookKeys = Object.keys(book);
 
     bookKeys.forEach((key) => {
@@ -46,21 +63,37 @@ function displayBook() {
       p.textContent = book[key];
       card.insertAdjacentElement('beforeend', p);
     });
+    const removeBookBtn = createRemoveBookBtn();
+    card.insertAdjacentElement('beforeend', removeBookBtn);
+    removeBookBtn.setAttribute('button-index', index);
     container.appendChild(card);
   });
 }
 
+// Appends createBook() to myLibrary, and calls displayBooks() to render new list
 function addBookToLibrary() {
   const form = document.querySelector('form');
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    const formData = new FormData(form);
-    const book = Object.fromEntries(formData);
-    myLibrary.push(book);
-    displayBook();
+    myLibrary.push(createBook(form));
+    displayBooks();
     closeModal();
   });
 }
 
+// Removes book object from myLibrary via button click and calls displayBooks() to render new list
+function removeBookFromLibrary() {
+  const container = document.getElementById('book-container');
+
+  container.addEventListener('click', (event) => {
+    if (event.target.classList.contains('remove-book')) {
+      const index = event.target.getAttribute('button-index');
+      myLibrary.splice(index, 1);
+      displayBooks();
+    }
+  });
+}
+
 addBookToLibrary();
+removeBookFromLibrary();
