@@ -1,19 +1,40 @@
-function Book(title, author, pages, read) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.read = read;
+// Modal logic
+const newBookBtn = document.querySelector('.new-book');
+const modal = document.querySelector('.modal');
+const body = document.querySelector('body');
+const darkBg = document.createElement('div');
+
+// Open
+newBookBtn.addEventListener('click', () => {
+  modal.classList.add('show-modal');
+  darkBg.classList.add('dark-bg');
+  body.insertAdjacentElement('afterbegin', darkBg);
+});
+
+// Close
+function clearForm() {
+  const form = document.querySelector('form');
+  const inputs = form.querySelectorAll('input');
+
+  inputs.forEach((input) => {
+    input.value = '';
+  });
 }
 
+function closeModal() {
+  modal.classList.remove('show-modal');
+  darkBg.remove();
+  clearForm();
+}
+
+darkBg.addEventListener('click', () => closeModal());
+
+// Array to store book objects
 const myLibrary = [];
-
-function addBookToLibrary() {
-  const book = new Book('One Piece', 'Eiichiro Oda', '21,450', 'Completed');
-  myLibrary.push(book);
-}
 
 function displayBook() {
   const container = document.getElementById('book-container');
+  container.innerHTML = '';
 
   myLibrary.forEach((book) => {
     const card = document.createElement('div');
@@ -29,32 +50,17 @@ function displayBook() {
   });
 }
 
-addBookToLibrary();
-addBookToLibrary();
-addBookToLibrary();
-console.log(myLibrary);
-displayBook();
+function addBookToLibrary() {
+  const form = document.querySelector('form');
 
-// Modal logic
-const newBookBtn = document.querySelector('.new-book');
-const submitBook = document.querySelector('.submit-book');
-const modal = document.querySelector('.modal');
-const body = document.querySelector('body');
-
-// Open
-const darkBg = document.createElement('div');
-
-newBookBtn.addEventListener('click', () => {
-  modal.classList.add('show-modal');
-  darkBg.classList.add('dark-bg');
-  body.insertAdjacentElement('afterbegin', darkBg);
-});
-
-// Close
-function closeModal() {
-  modal.classList.remove('show-modal');
-  darkBg.remove();
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const book = Object.fromEntries(formData);
+    myLibrary.push(book);
+    displayBook();
+    closeModal();
+  });
 }
 
-submitBook.addEventListener('click', () => closeModal());
-darkBg.addEventListener('click', () => closeModal());
+addBookToLibrary();
