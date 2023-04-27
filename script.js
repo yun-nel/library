@@ -4,17 +4,20 @@ const modal = document.querySelector('.modal');
 const body = document.querySelector('body');
 const darkBg = document.createElement('div');
 
-// Open
+// Open modal
 newBookBtn.addEventListener('click', () => {
   modal.classList.add('show-modal');
   darkBg.classList.add('dark-bg');
   body.insertAdjacentElement('afterbegin', darkBg);
 });
 
-// Close
+// Close modal
+const checkbox = document.getElementById('read-check'); // Get checkbox to be used in multiple functions
+
 function clearForm() {
   const form = document.querySelector('form');
   const inputs = form.querySelectorAll('input');
+  checkbox.checked = false;
 
   inputs.forEach((input) => {
     input.value = '';
@@ -47,6 +50,23 @@ function createBook(form) {
   return new Book(title, author, pages, read);
 }
 
+Book.prototype.checkRead = function () {
+  if (this.read === 'Read') return;
+  this.read = 'Not read';
+};
+
+// Book.prototype.toggleRead = function() {
+//   if (this.read === 'Read') this.read =
+// }
+
+function createButton(className, textContent, index) {
+  const button = document.createElement('button');
+  button.classList.add(className);
+  button.textContent = textContent;
+  button.setAttribute('button-index', index);
+  return button;
+}
+
 // Returns a button element with class "remove-book"
 function createRemoveBookBtn() {
   const removeBookBtn = document.createElement('button');
@@ -72,9 +92,10 @@ function displayBooks() {
       p.textContent = book[key];
       card.insertAdjacentElement('beforeend', p);
     });
-    const removeBookBtn = createRemoveBookBtn();
-    card.insertAdjacentElement('beforeend', removeBookBtn);
-    removeBookBtn.setAttribute('button-index', index);
+    card.insertAdjacentElement(
+      'beforeend',
+      createButton('remove-book', 'Remove', index)
+    );
     container.appendChild(card);
   });
 }
@@ -85,9 +106,13 @@ function addBookToLibrary() {
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    myLibrary.push(createBook(form));
+    checkbox.value = checkbox.checked ? 'Read' : '';
+    const book = createBook(form);
+    book.checkRead();
+    myLibrary.push(book);
     displayBooks();
     closeModal();
+    console.log(myLibrary);
   });
 }
 
