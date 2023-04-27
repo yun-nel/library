@@ -80,7 +80,7 @@ function displayBooks() {
     const bookKeys = Object.keys(book);
 
     bookKeys.forEach((value) => {
-      if (book[value] === 'Read') return;
+      if (book[value] === 'Read' || book[value] === 'Not read') return;
       const p = document.createElement('p');
       p.textContent = book[value];
       card.insertAdjacentElement('beforeend', p);
