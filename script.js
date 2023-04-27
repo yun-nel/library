@@ -67,14 +67,6 @@ function createButton(className, textContent, index) {
   return button;
 }
 
-// Returns a button element with class "remove-book"
-function createRemoveBookBtn() {
-  const removeBookBtn = document.createElement('button');
-  removeBookBtn.classList.add('remove-book');
-  removeBookBtn.textContent = 'Remove';
-  return removeBookBtn;
-}
-
 // Renders the book objects stored in myLibrary
 function displayBooks() {
   const container = document.getElementById('book-container');
@@ -87,11 +79,16 @@ function displayBooks() {
     card.dataset.index = index;
     const bookKeys = Object.keys(book);
 
-    bookKeys.forEach((key) => {
+    bookKeys.forEach((value) => {
+      if (book[value] === 'Read') return;
       const p = document.createElement('p');
-      p.textContent = book[key];
+      p.textContent = book[value];
       card.insertAdjacentElement('beforeend', p);
     });
+    card.insertAdjacentElement(
+      'beforeend',
+      createButton('toggle-read', book.read, index)
+    );
     card.insertAdjacentElement(
       'beforeend',
       createButton('remove-book', 'Remove', index)
