@@ -32,10 +32,19 @@ darkBg.addEventListener('click', () => closeModal());
 // Array to store book objects
 const myLibrary = [];
 
+// Book object constructor
+function Book(title, author, pages, read) {
+  this.title = title;
+  this.author = author;
+  this.pages = pages;
+  this.read = read;
+}
+
 // Returns a book object via user form input
 function createBook(form) {
   const formData = new FormData(form);
-  return Object.fromEntries(formData);
+  const [title, author, pages, read] = [...formData.values()];
+  return new Book(title, author, pages, read);
 }
 
 // Returns a button element with class "remove-book"
