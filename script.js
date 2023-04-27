@@ -55,9 +55,10 @@ Book.prototype.checkRead = function () {
   this.read = 'Not read';
 };
 
-// Book.prototype.toggleRead = function() {
-//   if (this.read === 'Read') this.read =
-// }
+Book.prototype.toggleRead = function () {
+  if (this.read === 'Read') this.read = 'Not read';
+  else this.read = 'Read';
+};
 
 function createButton(className, textContent, index) {
   const button = document.createElement('button');
@@ -113,18 +114,24 @@ function addBookToLibrary() {
   });
 }
 
-// Removes book object from myLibrary via button click and calls displayBooks() to render new list
-function removeBookFromLibrary() {
-  const container = document.getElementById('book-container');
+const container = document.getElementById('book-container');
 
-  container.addEventListener('click', (event) => {
-    if (event.target.classList.contains('remove-book')) {
-      const index = event.target.getAttribute('button-index');
-      myLibrary.splice(index, 1);
-      displayBooks();
-    }
-  });
-}
+// Removes book object from myLibrary via button click and calls displayBooks() to render new list
+container.addEventListener('click', (event) => {
+  if (event.target.classList.contains('remove-book')) {
+    const index = event.target.getAttribute('button-index');
+    myLibrary.splice(index, 1);
+    displayBooks();
+  }
+});
+
+// Toggles read property of specific book object via button click and calls displayBooks() to render new list
+container.addEventListener('click', (event) => {
+  if (event.target.classList.contains('toggle-read')) {
+    const index = event.target.getAttribute('button-index');
+    myLibrary[index].toggleRead();
+    displayBooks();
+  }
+});
 
 addBookToLibrary();
-removeBookFromLibrary();
