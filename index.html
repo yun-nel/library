@@ -16,7 +16,7 @@
   </head>
   <body>
     <header>
-      <h1>Nelibrary</h1>
+      <h1>nelibrary.</h1>
       <button class="login">Log in</button>
     </header>
     <div class="modal-container">
@@ -27,8 +27,10 @@
           <input type="text" name="title" placeholder="Title" required />
           <input type="text" name="author" placeholder="Author" required />
           <input type="number" name="pages" placeholder="Pages" required />
-          <label for="read">Have you read it?</label>
-          <input type="checkbox" id="read-check" name="read" value="Read" />
+          <div>
+            <label for="read">Have you read it?</label>
+            <input type="checkbox" id="read-check" name="read" value="Read" />
+          </div>
           <button class="submit-book" type="submit">Submit</button>
         </form>
       </div>
