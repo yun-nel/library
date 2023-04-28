@@ -50,6 +50,7 @@ function createBook(form) {
   return new Book(title, author, pages, read);
 }
 
+// Book methods
 Book.prototype.checkRead = function () {
   if (this.read === 'Read') return;
   this.read = 'Not read';
@@ -58,6 +59,14 @@ Book.prototype.checkRead = function () {
 Book.prototype.toggleRead = function () {
   if (this.read === 'Read') this.read = 'Not read';
   else this.read = 'Read';
+};
+
+Book.prototype.addReadStatusClass = function (button) {
+  if (this.read === 'Read') {
+    button.classList.add('read');
+    return;
+  }
+  button.classList.add('not-read');
 };
 
 function createButton(className, textContent, index) {
@@ -86,10 +95,9 @@ function displayBooks() {
       p.textContent = book[value];
       card.insertAdjacentElement('beforeend', p);
     });
-    card.insertAdjacentElement(
-      'beforeend',
-      createButton('toggle-read', book.read, index)
-    );
+    const readButton = createButton('toggle-read', book.read, index);
+    book.addReadStatusClass(readButton);
+    card.insertAdjacentElement('beforeend', readButton);
     card.insertAdjacentElement(
       'beforeend',
       createButton('remove-book', 'Remove', index)
